@@ -23,7 +23,7 @@ ready to go.
 	$ python
     >>> from slog.slog import Slog
     >>> log = Slog(loglvl=5, logfile="test.log")
-    >>> for lvl in ['ok', 'info', 'warn', 'fail', 'crit']: getattr(log, lvl)('Testing!')
+    >>> for lvl in ['ok', 'info', 'warn', 'fail', 'crit']: getattr(log, lvl)('Testing me a slog')
     ...
     2016-08-18 05:29:09 || [  OK  ] ⬢ (<stdin>:1) 	Testing me a slog
     2016-08-18 05:29:09 || [ INFO ] ⬢ (<stdin>:1) 	Testing me a slog
