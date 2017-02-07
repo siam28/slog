@@ -36,12 +36,12 @@ class Slog(object):
         fn = fn.split('/')[-1]
         if level != 'ok':
             return [
-                    str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored('⬢', color) +' (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message,
-                    str(ct()) + ' || [ ' + level.upper() + ' ] (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message]
+                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored('⬢', color) +' (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message,
+                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message]
         else:
             return [
-                    str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored('⬢', color) +' (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message,
-                    str(ct()) + ' || [  '+ level.upper() +'  ] (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message]
+                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored('⬢', color) +' (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message,
+                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message]
 
     def slogPrint(self, message, level, writem):
         if level <= self.loglvl:
