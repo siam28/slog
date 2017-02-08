@@ -37,11 +37,11 @@ class Slog(object):
         if level != 'ok':
             return [
                     '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored('⬢', color) +' (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message,
-                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message]
+                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ({0}:{1})\t'.format(fn, ln) + message]
         else:
             return [
                     '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored('⬢', color) +' (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message,
-                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message]
+                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ({0}:{1})\t'.format(fn, ln) + message]
 
     def slogPrint(self, message, level, writem):
         if level <= self.loglvl:
