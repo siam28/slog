@@ -11,20 +11,27 @@ def ct():
     return strftime('%Y-%m-%d %H:%M:%S')
 
 class Slog(object):
-    def __init__(self, logfile=None, loglvl=3, inspect=False):
+    def __init__(self, logfile=None, loglvl=3, inspect=False, bufsize=4096, splotch='⬢'):
+        # the log file
         if logfile is not None:
-            self.logfile = open(logfile, 'w+')
+            self.logfile = open(logfile, 'w+', bufsize)
         else:
             self.logfile = None
+
+        # the log level
         if 0 <= loglvl <= 5:
             self.loglvl = loglvl
         else:
             self.loglvl = 3
+
+        # whether or not calls to `inspect` functions will be made
         if inspect:
             self.inspect_func = self.get_file_and_lineno
         else:
             self.inspect_func = self.null_inspect
-        self.messageMade = False
+
+        # custom splotch
+        self.splotch = splotch
 
     def get_file_and_lineno(self):
         fn = currentframe().f_back.f_back.f_back.f_code.co_filename
@@ -39,44 +46,44 @@ class Slog(object):
         if self.logfile:
             self.logfile.close()
 
-    def makeMessage(self, level, message, color):
-        self.messageMade = True
+    def slog_fmt(self, level, message, color, splotch=self.splotch):
         fnln = self.inspect_func()
         if level != 'ok':
             return [
-                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored('⬢', color) + fnln + message,
+                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored(splotch, color) + fnln + message,
                     '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + fnln + message]
         else:
             return [
-                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored('⬢', color) + fnln + message,
+                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored(splotch, color) + fnln + message,
                     '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + fnln + message]
 
-    def slogPrint(self, message, level, writem):
+    def slog_print(self, message, level, writem):
         if level <= self.loglvl:
             if 't' in writem:
                 print(message[0])
             if self.logfile and 'f' in writem:
                 self.logfile.write(message[1] + '\n')
 
-    def ok(self, message, writem='ft'):
-        message = self.makeMessage('ok', message, 'green')
+    def ok(self, message, writem='ft', splotch=self.splotch):
+        message = self.slog_fmt('ok', message, 'green', splotch)
         self.slogPrint(message, 5, writem)
 
-    def info(self, message, writem='ft'):
-        message = self.makeMessage('info', message, 'blue')
+    def info(self, message, writem='ft', splotch=self.splotch):
+        message = self.slog_fmt('info', message, 'blue', splotch)
         self.slogPrint(message, 4, writem)
 
-    def warn(self, message, writem='ft'):
-        message = self.makeMessage('warn', message, 'yellow')
+    def warn(self, message, writem='ft', splotch=self.splotch):
+        message = self.slog_fmt('warn', message, 'yellow', splotch)
         self.slogPrint(message, 3, writem)
 
-    def fail(self, message, writem='ft'):
-        message = self.makeMessage('fail', message, 'red')
+    def fail(self, message, writem='ft', splotch=self.splotch):
+        message = self.slog_fmt('fail', message, 'red', splotch)
         self.slogPrint(message, 2, writem)
 
-    def crit(self, message, writem='ft'):
-        message = self.makeMessage('crit', message, 'magenta')
+    def crit(self, message, writem='ft', splotch=self.splotch):
+        message = self.slog_fmt('crit', message, 'magenta', splotch)
         self.slogPrint(message, 1, writem)
 
-    def write(self, message, level=3, color='blue', writem='ft'):
-        self.slogPrint(message, level, writem)
+    def write(self, message, level=3, color='blue', writem='ft', splotch=self.splotch):
+        slog_fmt(level, message, color, splotch)
+        self.slog_print(message, level, writem, splotch)

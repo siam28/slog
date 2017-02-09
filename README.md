@@ -58,34 +58,43 @@ actual reference:
 
 ### API Reference
 
-- `slog.Slog(logfile=None, loglvl=3, inspect=False)`
+- `slog.Slog(logfile=None, loglvl=3, inspect=False, bufsize=4097, splotch='⬢')`
 
-  The `Slog` class constructor takes three optional parameters: the name of the
-  logile (defaults to `None`), the logging level (defaults to `3`; can be 
-  anywhere from `0` to `5`; see below), and a toggle for use of the `inspect` module
-  (defaults to `False`).
+  The `Slog` class constructor takes up to fieve positional arguments:
+  - The name of the logile (defaults to `None`);
+  
+  - The logging level (defaults to `3`; can be from `0` to `5`; see below);
+  
+  - A toggle for use of the `inspect` module (defaults to `False`; it's expensive);
 
-- `slog.Slog.info(message)`
+  - A flush-to-disk thereshold (defaults to 4096 bytes, a common block size in
+  	modern filesystems)
+  
+  - A splotch customizer (defaults to a filled-in hexagon). This is the colored
+  	bit in your logger terminal output that helps you have an at-a-glance
+  	understanding of the severity of a log message.
+
+- `slog.Slog.info(message, writem='ft', splotch=self.splotch)`
  
   Displays a message with log level "INFO".
 
-- `slog.Slog.ok(message)`
+- `slog.Slog.ok(message, writem='ft', splotch=self.splotch)`
 
   Displays a message with log level "OK".
 
-- `slog.Slog.warn(message)`
+- `slog.Slog.warn(message, writem='ft', splotch=self.splotch)`
 
   Displays a message with log level "WARN".
 
-- `slog.Slog.fail(message)`
+- `slog.Slog.fail(message, writem='ft', splotch=self.splotch)`
 
   Displays a message with log level "FAIL".
 
-- `slog.Slog.CRIT(message)`
+- `slog.Slog.CRIT(message, writem='ft', splotch=self.splotch)`
 
   Displays a message with log level "CRIT".
 
-- `slog.Slog.write(message, level=3, color='blue', writem='ft')`
+- `slog.Slog.write(message, level=3, color='blue', writem='ft', slog_fmt=True, splotch=self.splotch)`
 
   Displays a log message with a nonstandard level and color. `writem` determines
   if a message should be logged to a file (`f`), to the terminal (`ft`), or to

@@ -3,4 +3,3 @@ README
 setup.cfg
 setup.py
 slog/__init__.py
-slog/slog.py
