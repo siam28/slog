@@ -22,7 +22,7 @@ ready to go.
 
 	$ python
     >>> from slog.slog import Slog
-    >>> log = Slog(loglvl=5, logfile="test.log")
+    >>> log = Slog(loglvl=5, logfile="test.log", inspect=True)
     >>> for lvl in ['ok', 'info', 'warn', 'fail', 'crit']: getattr(log, lvl)('Testing me a slog')
     ...
     2016-08-18 05:29:09 || [  OK  ] ⬢ (<stdin>:1) 	Testing me a slog
@@ -39,14 +39,58 @@ ready to go.
     2016-08-18 05:29:09 || [ FAIL ] (<stdin>:1) 	Testing me a slog
     2016-08-18 05:29:09 || [ CRIT ] (<stdin>:1) 	Testing me a slog
 
-That snippet is a comprehensive example of Slog's essential API.
+That snippet is a comprehensive example of Slog's essential API, but here's an
+actual reference:
 
-The `Slog` class takes two optional parameters: the name of the
-logfile (defaults to `None`) and the logging level (`[0..5]`,
-defaults to `3`). If the latter gets a parameter outside of that
-range, it'll default to 3.
+### API Reference
 
-The levels correspond to:
+- `slog.slog.Slog(logfile=None, loglvl=3, inspect=False)`
+
+  The `Slog` class constructor takes three optional parameters: the name of the
+  logile (defaults to `None`), the logging level (defaults to `3`; can be 
+  anywhere from `0` to `5`; see below), and a toggle for use of the `inspect` module
+  (defaults to `False`).
+
+- `slog.slog.Slog.info(message)`
+ 
+  Displays a message with log level "INFO".
+
+- `slog.slog.Slog.ok(message)`
+
+  Displays a message with log level "OK".
+
+- `slog.slog.Slog.warn(message)`
+
+  Displays a message with log level "WARN".
+
+- `slog.slog.Slog.fail(message)`
+
+  Displays a message with log level "FAIL".
+
+- `slog.slog.Slog.CRIT(message)`
+
+  Displays a message with log level "CRIT".
+
+- `slog.slog.Slog.write(message, level=3, color='blue', writem='ft')`
+
+  Displays a log message with a nonstandard level and color. `writem` determines
+  if a message should be logged to a file (`f`), to the terminal (`ft`), or to
+  both (`ft` or `tf`).
+
+### Inspection providers
+
+> Introspection? Free? Not in this economy.
+
+No language can provide performance-friendly introspection. For this reason,
+the `inspect`-based functionality of slog is optional and provider-based.
+
+On class initialization, the provider will be either `null_inspect`, as close to
+a no-op as possible here, or `get_file_and_lineno`, which, as the name implies,
+returns a pre-formatted string of the file and line number.
+
+### Logging levels
+
+The logging levels correspond to:
 
 -  `5` => log everything everywhere
 -  `4` => log only `info` and higher (skips `ok`)
