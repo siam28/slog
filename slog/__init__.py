@@ -46,15 +46,15 @@ class Slog(object):
         if self.logfile:
             self.logfile.close()
 
-    def slog_fmt(self, level, message, color, splotch=self.splotch):
+    def slog_fmt(self, level, message, color):
         fnln = self.inspect_func()
         if level != 'ok':
             return [
-                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored(splotch, color) + fnln + message,
+                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored(self.splotch, color) + fnln + message,
                     '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + fnln + message]
         else:
             return [
-                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored(splotch, color) + fnln + message,
+                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored(self.splotch, color) + fnln + message,
                     '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + fnln + message]
 
     def slog_print(self, message, level, writem):
@@ -64,26 +64,26 @@ class Slog(object):
             if self.logfile and 'f' in writem:
                 self.logfile.write(message[1] + '\n')
 
-    def ok(self, message, writem='ft', splotch=self.splotch):
-        message = self.slog_fmt('ok', message, 'green', splotch)
-        self.slogPrint(message, 5, writem)
+    def ok(self, message, writem='ft'):
+        message = self.slog_fmt('ok', message, 'green')
+        self.slog_print(message, 5, writem)
 
-    def info(self, message, writem='ft', splotch=self.splotch):
-        message = self.slog_fmt('info', message, 'blue', splotch)
-        self.slogPrint(message, 4, writem)
+    def info(self, message, writem='ft'):
+        message = self.slog_fmt('info', message, 'blue')
+        self.slog_print(message, 4, writem)
 
-    def warn(self, message, writem='ft', splotch=self.splotch):
-        message = self.slog_fmt('warn', message, 'yellow', splotch)
-        self.slogPrint(message, 3, writem)
+    def warn(self, message, writem='ft'):
+        message = self.slog_fmt('warn', message, 'yellow')
+        self.slog_print(message, 3, writem)
 
-    def fail(self, message, writem='ft', splotch=self.splotch):
-        message = self.slog_fmt('fail', message, 'red', splotch)
-        self.slogPrint(message, 2, writem)
+    def fail(self, message, writem='ft'):
+        message = self.slog_fmt('fail', message, 'red')
+        self.slog_print(message, 2, writem)
 
-    def crit(self, message, writem='ft', splotch=self.splotch):
-        message = self.slog_fmt('crit', message, 'magenta', splotch)
-        self.slogPrint(message, 1, writem)
+    def crit(self, message, writem='ft'):
+        message = self.slog_fmt('crit', message, 'magenta')
+        self.slog_print(message, 1, writem)
 
-    def write(self, message, level=3, color='blue', writem='ft', splotch=self.splotch):
-        slog_fmt(level, message, color, splotch)
-        self.slog_print(message, level, writem, splotch)
+    def write(self, message, level=3, color='blue', writem='ft'):
+        self.slog_fmt(level, message, color)
+        self.slog_print(message, level, writem)
