@@ -11,7 +11,7 @@ def ct():
     return strftime('%Y-%m-%d %H:%M:%S')
 
 class Slog(object):
-    def __init__(self, logfile=None, loglvl=3):
+    def __init__(self, logfile=None, loglvl=3, inspect=False):
         if logfile is not None:
             self.logfile = open(logfile, 'w+')
         else:
@@ -20,11 +20,20 @@ class Slog(object):
             self.loglvl = loglvl
         else:
             self.loglvl = 3
+        if inspect:
+            self.inspect_func = self.get_file_and_lineno
+        else:
+            self.inspect_func = self.null_inspect
         self.messageMade = False
 
     def get_file_and_lineno(self):
-        return (currentframe().f_back.f_back.f_back.f_code.co_filename,
-                currentframe().f_back.f_back.f_back.f_lineno)
+        fn = currentframe().f_back.f_back.f_back.f_code.co_filename
+        fn = fn.split('/')[-1]
+        lineno = currentframe().f_back.f_back.f_back.f_lineno
+        return ' (\033[1m{0}:{1}\033[0m) '.format(fn, lineno)
+
+    def null_inspect(self):
+        return ' '
 
     def __del__(self):
         if self.logfile:
@@ -32,16 +41,15 @@ class Slog(object):
 
     def makeMessage(self, level, message, color):
         self.messageMade = True
-        fn, ln = self.get_file_and_lineno()
-        fn = fn.split('/')[-1]
+        fnln = self.inspect_func()
         if level != 'ok':
             return [
-                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored('⬢', color) +' (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message,
-                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ({0}:{1})\t'.format(fn, ln) + message]
+                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored('⬢', color) + fnln + message,
+                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + fnln + message]
         else:
             return [
-                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored('⬢', color) +' (\033[1m{0}:{1}\033[0m)\t'.format(fn, ln) + message,
-                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ({0}:{1})\t'.format(fn, ln) + message]
+                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored('⬢', color) + fnln + message,
+                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + fnln + message]
 
     def slogPrint(self, message, level, writem):
         if level <= self.loglvl:
