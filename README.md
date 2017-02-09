@@ -1,4 +1,18 @@
+# slog
+
 ![](https://img.shields.io/pypi/dm/Slog.svg)
+
+## 0.8.0 BREAKING CHANGE ALERT!
+
+Version 0.8.0 of Slog changes the import scheme. Now, importing is done using:
+
+	>>> from slog import Slog
+
+... rather than the old method:
+
+	>>> from slog.slog import Slog
+
+---
 
 Slog is a simple logging framework named after the verb some people use to
 describe the task of integrating logging into their projects.
@@ -21,7 +35,7 @@ Syntax is simple enough; instantiate the Slog class and you're basically
 ready to go.
 
 	$ python
-    >>> from slog.slog import Slog
+    >>> from slog import Slog
     >>> log = Slog(loglvl=5, logfile="test.log", inspect=True)
     >>> for lvl in ['ok', 'info', 'warn', 'fail', 'crit']: getattr(log, lvl)('Testing me a slog')
     ...
@@ -44,34 +58,34 @@ actual reference:
 
 ### API Reference
 
-- `slog.slog.Slog(logfile=None, loglvl=3, inspect=False)`
+- `slog.Slog(logfile=None, loglvl=3, inspect=False)`
 
   The `Slog` class constructor takes three optional parameters: the name of the
   logile (defaults to `None`), the logging level (defaults to `3`; can be 
   anywhere from `0` to `5`; see below), and a toggle for use of the `inspect` module
   (defaults to `False`).
 
-- `slog.slog.Slog.info(message)`
+- `slog.Slog.info(message)`
  
   Displays a message with log level "INFO".
 
-- `slog.slog.Slog.ok(message)`
+- `slog.Slog.ok(message)`
 
   Displays a message with log level "OK".
 
-- `slog.slog.Slog.warn(message)`
+- `slog.Slog.warn(message)`
 
   Displays a message with log level "WARN".
 
-- `slog.slog.Slog.fail(message)`
+- `slog.Slog.fail(message)`
 
   Displays a message with log level "FAIL".
 
-- `slog.slog.Slog.CRIT(message)`
+- `slog.Slog.CRIT(message)`
 
   Displays a message with log level "CRIT".
 
-- `slog.slog.Slog.write(message, level=3, color='blue', writem='ft')`
+- `slog.Slog.write(message, level=3, color='blue', writem='ft')`
 
   Displays a log message with a nonstandard level and color. `writem` determines
   if a message should be logged to a file (`f`), to the terminal (`ft`), or to
@@ -151,7 +165,9 @@ github.com/verandaguy/slog/issues.
 
 #### Acknowledgements (from way back, before the re-release)
 
+- `github.com/faeriol` for providing valuable feedback and advice about future
+  functionality and optimizations.
+
 -  Reddit user /u/pujuma for helping fix issue #1
 
 -  Reddit user /u/grundee for providing feedback about the API
-
