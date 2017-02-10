@@ -46,16 +46,17 @@ class Slog(object):
         if self.logfile:
             self.logfile.close()
 
-    def slog_fmt(self, level, message, color):
-        fnln = self.inspect_func()
+    def slog_fmt(self, level, message, color, fnln=None):
+        if fnln is None:
+            fnln = self.inspect_func
         if level != 'ok':
             return [
-                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored(self.splotch, color) + fnln + message,
-                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + fnln + message]
+                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + colored(self.splotch, color) + fnln() + message,
+                    '\r' + str(ct()) + ' || [ ' + level.upper() + ' ] ' + fnln() + message]
         else:
             return [
-                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored(self.splotch, color) + fnln + message,
-                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + fnln + message]
+                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + colored(self.splotch, color) + fnln() + message,
+                    '\r' + str(ct()) + ' || [  '+ level.upper() +'  ] ' + fnln() + message]
 
     def slog_print(self, message, level, writem):
         if level <= self.loglvl:
@@ -81,7 +82,7 @@ class Slog(object):
         self.slog_print(message, 2, writem)
 
     def crit(self, message, writem='ft'):
-        message = self.slog_fmt('crit', message, 'magenta')
+        message = self.slog_fmt('crit', message, 'magenta', self.get_file_and_lineno)
         self.slog_print(message, 1, writem)
 
     def write(self, message, level=3, color='blue', writem='ft'):
