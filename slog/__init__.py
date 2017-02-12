@@ -47,7 +47,6 @@ class Slog(object):
             self.logfile.close()
 
     def slog_fmt(self, level, message, color, fnln=None):
-        message = message.decode('UTF-8')
         if fnln is None:
             fnln = self.inspect_func
         if level != 'ok':
