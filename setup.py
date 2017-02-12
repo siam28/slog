@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name = 'slog',
     packages = ['slog'],
-    version = '0.10.0',
+    version = '0.10.1',
     description = 'A simple logger.',
     author = 'Jules Mazur',
     author_email = 'julesmazur@gmail.com',
