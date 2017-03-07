@@ -1,19 +1,5 @@
 # slog
 
-![](https://img.shields.io/pypi/dm/Slog.svg)
-
-## 0.8.0 BREAKING CHANGE ALERT!
-
-Version 0.8.0 of Slog changes the import scheme. Now, importing is done using:
-
-	>>> from slog import Slog
-
-... rather than the old method:
-
-	>>> from slog.slog import Slog
-
----
-
 Slog is a simple logging framework named after the verb some people use to
 describe the task of integrating logging into their projects.
 
