@@ -131,14 +131,14 @@ For Python 2 (only 2.7 tested):
 
 	$ pip install slog
 
-#### New stuff in this re-release
+#### New stuff in this release
 
 - File names and line numbers! Each slog call will include the file name and
   line number of the call.
 
 #### Extending and modifying slog
 
-It's a single-file, 75ish-line module, so I didn't build in a plugin
+It's a single-file, sub-100-line module, so I didn't build in a plugin
 architecture, and I'm not planning on it. Slog's under an MIT license, though,
 so go wild modifying it.
 
