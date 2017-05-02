@@ -49,7 +49,7 @@ actual reference:
   The `Slog` class constructor takes up to fieve positional arguments:
   - The name of the logile (defaults to `None`);
   
-  - The logging level (defaults to `3`; can be from `0` to `5`; see below);
+  - The logging level (defaults to `3`; can be from `0` to `5`; see below); it can also be any of the values `all`, `info`, `warn`, `fail`, `crit`, or `silent`.
   
   - A toggle for use of the `inspect` module (defaults to `False`; it's expensive);
 

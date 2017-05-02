@@ -18,11 +18,18 @@ class Slog(object):
         else:
             self.logfile = None
 
-        # the log level
-        if 0 <= loglvl <= 5:
+        # acceptable string log levels
+        loglvls = ['silent', 'crit', 'fail', 'warn', 'info', 'all']
+
+        if type(loglvl) is int and 0 <= loglvl <= 5:
             self.loglvl = loglvl
+        elif loglvl in loglvls:
+            try:
+                self.loglvl = loglvls.index(loglvl)
+            except ValueError:
+                raise SlogLevelError('{0} is not a valid Slog log level.'.format(loglvl))
         else:
-            self.loglvl = 3
+            raise SlogLevelError('{0} is not a valid Slog log level.'.format(loglvl))
 
         # whether or not calls to `inspect` functions will be made
         if inspect:
@@ -88,3 +95,7 @@ class Slog(object):
     def write(self, message, level=3, color='blue', writem='ft'):
         self.slog_fmt(level, message, color)
         self.slog_print(message, level, writem)
+
+class SlogLevelError(Exception):
+    pass
+
