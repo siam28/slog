@@ -21,15 +21,15 @@ class Slog(object):
         # acceptable string log levels
         loglvls = ['silent', 'crit', 'fail', 'warn', 'info', 'all']
 
-        if type(loglvl) is int and 0 <= loglvl <= 5:
+        if loglvl in [0, 1, 2, 3, 4, 5]:
             self.loglvl = loglvl
         elif loglvl in loglvls:
             try:
                 self.loglvl = loglvls.index(loglvl)
             except ValueError:
-                raise SlogLevelError('{0} is not a valid Slog log level.'.format(loglvl))
+                raise SlogLevelError('"{0}":str is not a valid Slog log level.'.format(loglvl))
         else:
-            raise SlogLevelError('{0} is not a valid Slog log level.'.format(loglvl))
+            raise SlogLevelError('"{0}":{1} is not a valid Slog log level.'.format(loglvl, type(loglvl)))
 
         # whether or not calls to `inspect` functions will be made
         if inspect:

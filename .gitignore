@@ -1,4 +1,10 @@
 *.pyc
 __pycache__
 dist
+cache
+bin
+build
+include
+lib
+MANIFEST
 README
