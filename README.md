@@ -1,5 +1,7 @@
 # slog
 
+[![Build Status](https://travis-ci.org/verandaguy/slog.svg?branch=master)](https://travis-ci.org/verandaguy/slog)
+
 Slog is a simple logging framework named after the verb some people use to
 describe the task of integrating logging into their projects.
 
