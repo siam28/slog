@@ -13,9 +13,9 @@ def ct():
     return strftime('%Y-%m-%d %H:%M:%S')
 
 def get_file_and_lineno():
-    fn = currentframe().f_back.f_back.f_back.f_code.co_filename
-    fn = fn.split('/')[-1]
-    lineno = currentframe().f_back.f_back.f_back.f_lineno
+    ctx = currentframe().f_back.f_back.f_back
+    fn = ctx.f_code.co_filename.split('/')[-1]
+    lineno = ctx.f_lineno
     return ' (\033[1m{0}:{1}\033[0m) '.format(fn, lineno)
 
 def noop_inspect():
