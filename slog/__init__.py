@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # coding=utf8
 
+import os
 import logging
+import subprocess as sp
 
 from inspect import currentframe, getframeinfo
 from time import strftime, sleep
@@ -9,6 +11,21 @@ from termcolor import colored
 
 def ct():
     return strftime('%Y-%m-%d %H:%M:%S')
+
+def get_file_and_lineno():
+    fn = currentframe().f_back.f_back.f_back.f_code.co_filename
+    fn = fn.split('/')[-1]
+    lineno = currentframe().f_back.f_back.f_back.f_lineno
+    return ' (\033[1m{0}:{1}\033[0m) '.format(fn, lineno)
+
+def noop_inspect():
+    return ' '
+
+def default_paint(s, color):
+    return colored(s, color)
+
+def noop_paint(s, color):
+    return s
 
 class Slog(object):
     def __init__(self, logfile=None, loglvl=3, inspect=False, bufsize=4096, splotch=u'⬢'):
@@ -33,21 +50,18 @@ class Slog(object):
 
         # whether or not calls to `inspect` functions will be made
         if inspect:
-            self.inspect_func = self.get_file_and_lineno
+            self.inspect_func = get_file_and_lineno
         else:
-            self.inspect_func = self.null_inspect
+            self.inspect_func = noop_inspect
+
+        # detect color support or lack thereof
+        if int(sp.check_output(['tput', 'colors'])) >= 8:
+            self.paint = default_paint
+        else:
+            self.paint = noop_paint
 
         # custom splotch
         self.splotch = splotch
-
-    def get_file_and_lineno(self):
-        fn = currentframe().f_back.f_back.f_back.f_code.co_filename
-        fn = fn.split('/')[-1]
-        lineno = currentframe().f_back.f_back.f_back.f_lineno
-        return ' (\033[1m{0}:{1}\033[0m) '.format(fn, lineno)
-
-    def null_inspect(self):
-        return ' '
 
     def __del__(self):
         if self.logfile:
@@ -58,11 +72,11 @@ class Slog(object):
             fnln = self.inspect_func
         if level != 'ok':
             return [
-                    '\r' + ct() + ' || [ ' + level.upper() + ' ] ' + colored(self.splotch, color) + fnln() + message,
+                    '\r' + ct() + ' || [ ' + level.upper() + ' ] ' + self.paint(self.splotch, color) + fnln() + message,
                     '\r' + ct() + ' || [ ' + level.upper() + ' ] ' + fnln() + message]
         else:
             return [
-                    '\r' + ct() + ' || [  '+ level.upper() +'  ] ' + colored(self.splotch, color) + fnln() + message,
+                    '\r' + ct() + ' || [  '+ level.upper() +'  ] ' + self.paint(self.splotch, color) + fnln() + message,
                     '\r' + ct() + ' || [  '+ level.upper() +'  ] ' + fnln() + message]
 
     def slog_print(self, message, level, writem):
@@ -89,7 +103,7 @@ class Slog(object):
         self.slog_print(message, 2, writem)
 
     def crit(self, message, writem='ft'):
-        message = self.slog_fmt(u'crit', message, 'magenta', self.get_file_and_lineno)
+        message = self.slog_fmt(u'crit', message, 'magenta', get_file_and_lineno)
         self.slog_print(message, 1, writem)
 
     def write(self, message, level=3, color='blue', writem='ft'):
